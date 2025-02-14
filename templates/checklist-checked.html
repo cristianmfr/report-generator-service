@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório de Inspeção</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .template-info {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f5f5f5;
+      }
+      .category {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+      .subcategory {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #f9f9f9;
+      }
+      .item {
+        margin: 5px 0;
+        padding: 5px 10px;
+      }
+      .description {
+        color: #666;
+        font-size: 0.9em;
+      }
+      .answer {
+        margin-top: 5px;
+        padding: 5px;
+        background-color: #eef;
+      }
+      .comment {
+        font-style: italic;
+        color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Relatório de Inspeção</h1>
+      <p>Gerado em: {{ generated_at }}</p>
+    </div>
+
+    <div class="template-info">
+      <h2>{{ template['name'] }}</h2>
+      {% if template['description'] %}
+      <p class="description">{{ template['description'] }}</p>
+      {% endif %}
+      <p>ID da Inspeção: {{ inspection_id }}</p>
+      <p>ID do Ativo: {{ asset_id }}</p>
+    </div>
+
+    {% for category in categories %}
+    <div class="category">
+      <h3>{{ category['title'] }}</h3>
+      {% if category['description'] %}
+      <p class="description">{{ category['description'] }}</p>
+      {% endif %} {% for subcategory in category['subcategories'] %}
+      <div class="subcategory">
+        <h4>{{ subcategory['title'] }}</h4>
+        {% if subcategory['description'] %}
+        <p class="description">{{ subcategory['description'] }}</p>
+        {% endif %} {% for item in subcategory['items'] %}
+        <div class="item">
+          <p><strong>{{ item['title'] }}</strong></p>
+          {% if item['description'] %}
+          <p class="description">{{ item['description'] }}</p>
+          {% endif %} {% if item['answer'] %}
+          <div class="answer">
+            <p><strong>Resposta:</strong> {{ item['answer']['value'] }}</p>
+            {% if item['answer']['comment'] %}
+            <p class="comment">{{ item['answer']['comment'] }}</p>
+            {% endif %}
+            <p class="description">
+              Respondido em: {{ item['answer']['created_at'] }}
+            </p>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </body>
+</html>
